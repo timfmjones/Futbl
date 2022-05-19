@@ -1,0 +1,32 @@
+<div class="dialog-content">
+  <div class="modal-header">
+    <h2 class="modal-title">Settings</h2>
+    <button mat-icon-button (click)="save()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content [formGroup]="form">
+    <h3 matTooltip="Select the possible leagues of the mystery player">
+      Leagues:
+    </h3>
+    <mat-selection-list #leagueInput formControlName="leagues">
+      <mat-list-option *ngFor="let league of leagues" [value]="league">
+        {{ league }}
+      </mat-list-option>
+    </mat-selection-list>
+
+    <h3 matTooltip="Choose the game difficulty, 3-hardest, 1-eaiest">
+      Difficulty:
+    </h3>
+    <mat-slider
+      class="difficulty-slider"
+      formControlName="difficulty"
+      max="3"
+      min="1"
+      step="1"
+      thumbLabel="true"
+      tickInterval="1"
+    ></mat-slider>
+  </div>
+  <button mat-button (click)="openInfoDialog()">About the creator</button>
+</div>

@@ -1,0 +1,279 @@
+<div *ngIf="this.playerList.length == 0">
+  <!-- <div *ngIf="this.playerList.length < 1"> -->
+  <input
+    type="file"
+    style="display: inline-block"
+    (change)="incomingfile($event)"
+    placeholder="Upload file"
+    accept=".xlsx"
+  />
+  <button
+    type="button"
+    class="btn btn-info"
+    (click)="Upload()"
+    matTooltip="test"
+  >
+    Upload
+  </button>
+  <p>playerlist : {{ this.playerList[0] }}</p>
+</div>
+<img
+  src="../../assets/images/jersey3.png"
+  style="height: 1000px; margin-left: 5%; margin-bottom: -975px"
+/>
+
+<div class="content">
+  <div class="menu-buttons">
+    <button mat-raised-button (click)="openInstructionDialog()">
+      <mat-icon [ngStyle]="{ color: 'white' }">help</mat-icon>
+      <span class="button-label">How to play</span>
+    </button>
+
+    <button mat-raised-button (click)="openMenuDialog()">
+      <mat-icon [ngStyle]="{ color: 'white' }">settings</mat-icon>
+      <span class="button-label">Settings</span>
+    </button>
+  </div>
+  <h1 class="heading">Futbl</h1>
+
+  <div class="replay-button">
+    <button
+      mat-raised-button
+      matToolip="tool tip test"
+      (click)="generatePlayer()"
+    >
+      <mat-icon [ngStyle]="{ color: 'white' }">refresh</mat-icon>
+      <span class="button-label">Play again</span>
+    </button>
+  </div>
+
+  <p *ngIf="this.showAnswer">Answer: {{ this.correctPlayer?.name }}</p>
+
+  <div class="main-content">
+    <form>
+      <mat-form-field appearance="outline">
+        <mat-label>Guess a player</mat-label>
+        <input
+          matInput
+          #box
+          (keyup.enter)="guess(box.value)"
+          placeholder="Messi"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete #auto="matAutocomplete">
+          <div *ngIf="this.playerList.length != 0">
+            <!-- <mat-option *ngFor="let player of playerList | async" [value]="player.name">
+          {{player.name}}
+        </mat-option> -->
+          </div>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <!-- <input [(ngModel)]="guessName" #box type="text" (keyup.enter)="guess(box.value)" class="guess-input"> -->
+      <p style="margin-top: 2px" class="desc">Name:</p>
+      <p>
+        {{
+          this.guessedPlayer.name !== "N/A" ? this.guessedPlayer.name : "&nbsp;"
+        }}
+      </p>
+      <!-- <p>nation: {{this.guessedPlayer.nation}}  color: {{this.gotCountry}}</p> -->
+      <p
+        class="desc"
+        matTooltip="Green if same position, Yellow if same position group (defence, midfield, attack)"
+      >
+        Position:
+      </p>
+      <p
+        *ngIf="this.gotPosition == 'green'"
+        class="green"
+        matToolTip="Correct Position"
+      >
+        {{ this.guessedPlayer.position }}
+      </p>
+      <p
+        *ngIf="this.gotPosition == 'yellow'"
+        class="yellow"
+        matTooltip="Similar position"
+      >
+        {{ this.guessedPlayer.position }}
+      </p>
+      <p
+        *ngIf="this.gotPosition == 'red'"
+        class="red"
+        matTooltip="Wrong position"
+      >
+        {{ this.guessedPlayer.position }}
+      </p>
+      <p *ngIf="this.gotPosition == 'grey'" class="grey">&nbsp;</p>
+
+      <p class="desc" matTooltip="Gren if same club, Yellow if same league">
+        Club:
+      </p>
+      <p *ngIf="this.gotTeam == 'green'" class="green" matTooltip="Same club">
+        {{ this.guessedPlayer.team }}
+      </p>
+      <p
+        *ngIf="this.gotTeam == 'yellow'"
+        class="yellow"
+        matTooltip="Same league"
+      >
+        {{ this.guessedPlayer.team }}
+      </p>
+      <p *ngIf="this.gotTeam == 'red'" class="red" matTooltip="Wrong league">
+        {{ this.guessedPlayer.team }}
+      </p>
+      <p *ngIf="this.gotTeam == 'grey'" class="grey">&nbsp;</p>
+
+      <p
+        class="desc"
+        matTooltip="Green if same nationality, Yellow if from same continent"
+      >
+        Nationality:
+      </p>
+      <p
+        *ngIf="this.gotCountry == 'green'"
+        class="green"
+        matTooltip="Same nationality"
+      >
+        {{ this.guessedPlayer.nation }}
+      </p>
+      <p
+        *ngIf="this.gotCountry == 'yellow'"
+        class="yellow"
+        matTooltip="From same continetn"
+      >
+        {{ this.guessedPlayer.nation }}
+      </p>
+      <p
+        *ngIf="this.gotCountry == 'red'"
+        class="red"
+        matTooltip="different continents"
+      >
+        {{ this.guessedPlayer.nation }}
+      </p>
+      <p *ngIf="this.gotCountry == 'grey'" class="grey">&nbsp;</p>
+
+      <p class="desc">Age:</p>
+      <p>{{ this.gotAge !== "NA" ? this.gotAge : "&nbsp;" }}</p>
+
+      <!--     
+    <p>position: {{this.guessedPlayer.position}}  color: {{this.gotPosition}}</p>
+    <p>team: {{this.guessedPlayer.team}}  color: {{this.gotTeam}}</p> -->
+      <!-- <p> winner: {{this.winner}}</p> -->
+    </form>
+  </div>
+
+  <div class="prev-guess">
+    <div class="prev-guess-border">
+      <h2>Previous Guesses</h2>
+      <h4>Count: {{ this.prevGuess.length }}</h4>
+      <div *ngFor="let player of this.prevGuess">
+        <div>
+          <b>{{ player.player.name }} </b>
+        </div>
+        <div>
+          <!-- <p class="desc" matTooltip="Green if same position, Yellow if same position group (defence, midfield, attack)">Position:</p> -->
+          <span
+            *ngIf="player.gotPosition == 'green'"
+            class="green"
+            matToolTip="Correct Position"
+            >{{ player.player.position }}
+          </span>
+          <span
+            *ngIf="player.gotPosition == 'yellow'"
+            class="yellow"
+            matTooltip="Similar position"
+            >{{ player.player.position }}
+          </span>
+          <span
+            *ngIf="player.gotPosition == 'red'"
+            class="red"
+            matTooltip="Wrong position"
+            >{{ player.player.position }}
+          </span>
+          <span *ngIf="player.gotPosition == 'grey'" class="grey"
+            >{{ player.player.position }}
+          </span>
+        </div>
+        <div>
+          <span
+            *ngIf="player.gotTeam == 'green'"
+            class="green"
+            matTooltip="Same club"
+            >{{ player.player.team }}
+          </span>
+          <span
+            *ngIf="player.gotTeam == 'yellow'"
+            class="yellow"
+            matTooltip="Same league"
+            >{{ player.player.team }}
+          </span>
+          <span
+            *ngIf="player.gotTeam == 'red'"
+            class="red"
+            matTooltip="Wrong league"
+            >{{ player.player.team }}
+          </span>
+          <span *ngIf="player.gotTeam == 'grey'" class="grey">{{
+            player.player.team
+          }}</span>
+        </div>
+        <div>
+          <span
+            *ngIf="player.gotCountry == 'green'"
+            class="green"
+            matTooltip="Same nationality"
+            >{{ player.player.nation }}
+          </span>
+          <span
+            *ngIf="player.gotCountry == 'yellow'"
+            class="yellow"
+            matTooltip="From same continetn"
+            >{{ player.player.nation }}
+          </span>
+          <span
+            *ngIf="player.gotCountry == 'red'"
+            class="red"
+            matTooltip="different continents"
+            >{{ player.player.nation }}
+          </span>
+          <span *ngIf="player.gotCountry == 'grey'" class="grey">{{
+            player.player.nation
+          }}</span>
+        </div>
+        <div>
+          <span>{{ player.gotAge }}</span>
+        </div>
+      </div>
+      <!-- <div *ngFor="let player of this.prevGuess">
+        <span>player: {{player.player.name}} </span>
+  
+        <span *ngIf="player.gotPosition=='green'" class="green" matToolTip="Correct Position">{{player.player.position}}
+        </span>
+        <span *ngIf="player.gotPosition=='yellow'" class="yellow" matTooltip="Similar position">{{player.player.position}}
+        </span>
+        <span *ngIf="player.gotPosition=='red'" class="red" matTooltip="Wrong position">{{player.player.position}} </span>
+        <span *ngIf="player.gotPosition=='grey'" class="grey">{{player.player.position}} </span>
+  
+        <span *ngIf="player.gotTeam=='green'" class="green" matTooltip="Same club">{{player.player.team}} </span>
+        <span *ngIf="player.gotTeam=='yellow'" class="yellow" matTooltip="Same league">{{player.player.team}} </span>
+        <span *ngIf="player.gotTeam=='red'" class="red" matTooltip="Wrong league">{{player.player.team}} </span>
+        <span *ngIf="player.gotTeam=='grey'" class="grey">{{player.player.team}}</span>
+  
+        <span *ngIf="player.gotCountry=='green'" class="green" matTooltip="Same nationality">{{player.player.nation}}
+        </span>
+        <span *ngIf="player.gotCountry=='yellow'" class="yellow" matTooltip="From same continetn">{{player.player.nation}}
+        </span>
+        <span *ngIf="player.gotCountry=='red'" class="red" matTooltip="different continents">{{player.player.nation}}
+        </span>
+        <span *ngIf="player.gotCountry=='grey'" class="grey">{{player.player.nation}}</span>
+  
+        <span>{{player.gotAge}}</span>
+  
+  
+  
+      </div> -->
+    </div>
+  </div>
+</div>
+<button mat-button (click)="showCorrectPlayer()">Show Answer</button>
