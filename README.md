@@ -1,27 +1,22 @@
-# NgSoccerWordle
+# Futbl React App
+Welcome to the Futbl, a Soccer Player Guessing App! This React application challenges users to guess the correct soccer player based on clues provided. Similar to Wordle, coloured clues will indicate how close the guessed player is to the correct answer. 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.11.
+## Features
+- A collection of soccer players from various leagues.
+- Dynamic clues to help users guess the correct player.
+- Visual feedback with colours indicating correct team (green) and same league (yellow).
 
-## Development server
+## Getting Started
+### Installation 
+1. Clone the repository to your local machine:
+   `git clone https://github.com/timfmjones/Futbl.git`
+2. Change to the project directory:
+   `cd futbl`
+3. Install dependencies:
+   `npm install`
+### Running the app
+Start the development server:
+`npm start`
+Open your browser and navigate to http://localhost:3000 to play the game.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
